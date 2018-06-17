@@ -1,0 +1,25 @@
+git config --global user.name "hsy905709786"
+git config --global user.email "905709786@qq.com" 
+
+
+ssh-keygen -t rsa -C 905709786@qq.com
+一直回车 
+
+找到   id_rsa.pub   复制里面的内容
+
+让到githut.com  看人setting    ssh&&  贴贴内容
+
+下载代码
+
+账号username     hsy905709786
+邮箱email        905709786@qq.com
+
+
+git clone  地址
+
+
+提交代码
+git add .
+git commit -m "信息内容"
+
+git push --set-upstream origin master
