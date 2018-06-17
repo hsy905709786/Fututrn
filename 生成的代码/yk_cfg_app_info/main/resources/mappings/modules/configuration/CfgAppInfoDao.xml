@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.configuration.dao.interf.CfgAppInfoDao">
+    
+	<sql id="cfgAppInfoColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.photo_url AS "photoUrl",
+		a.link_type AS "linkType",
+		a.link_content AS "linkContent",
+		a.position_code AS "positionCode",
+		a.sort_num AS "sortNum",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cfgAppInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="CfgAppInfo">
+		SELECT 
+			<include refid="cfgAppInfoColumns"/>
+		FROM yk_cfg_app_info a
+		<include refid="cfgAppInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CfgAppInfo">
+		SELECT 
+			<include refid="cfgAppInfoColumns"/>
+		FROM yk_cfg_app_info a
+		<include refid="cfgAppInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE concat('%',#{title},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CfgAppInfo">
+		SELECT 
+			<include refid="cfgAppInfoColumns"/>
+		FROM yk_cfg_app_info a
+		<include refid="cfgAppInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_cfg_app_info(
+			id,
+			title,
+			photo_url,
+			link_type,
+			link_content,
+			position_code,
+			sort_num,
+			remark,
+			create_by,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{title},
+			#{photoUrl},
+			#{linkType},
+			#{linkContent},
+			#{positionCode},
+			#{sortNum},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_cfg_app_info SET 	
+			title = #{title},
+			photo_url = #{photoUrl},
+			link_type = #{linkType},
+			link_content = #{linkContent},
+			position_code = #{positionCode},
+			sort_num = #{sortNum},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_cfg_app_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

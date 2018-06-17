@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whs.shop.modules.goods.dao.interf.attribute.YkGoodsPropertyDao">
+    
+	<sql id="ykGoodsPropertyColumns">
+		a.id AS "id",
+		a.property_name AS "propertyName",
+		a.property_type AS "propertyType",
+		a.sort_num AS "sortNum",
+		a.create_by AS "createByUserID",
+		a.create_date AS "createDate",
+		a.is_show AS "isShow",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="ykGoodsPropertyJoins">
+	</sql>
+    
+	<select id="get" resultType="YkGoodsProperty">
+		SELECT 
+			<include refid="ykGoodsPropertyColumns"/>
+		FROM yk_goods_property a
+		<include refid="ykGoodsPropertyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YkGoodsProperty">
+		SELECT 
+			<include refid="ykGoodsPropertyColumns"/>
+		FROM yk_goods_property a
+		<include refid="ykGoodsPropertyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YkGoodsProperty">
+		SELECT 
+			<include refid="ykGoodsPropertyColumns"/>
+		FROM yk_goods_property a
+		<include refid="ykGoodsPropertyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_goods_property(
+			id,
+			property_name,
+			property_type,
+			sort_num,
+			create_by,
+			create_date,
+			is_show,
+			del_flag
+		) VALUES (
+			#{id},
+			#{propertyName},
+			#{propertyType},
+			#{sortNum},
+			#{createByUserID},
+			#{createDate},
+			#{isShow},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_goods_property SET 	
+			property_name = #{propertyName},
+			property_type = #{propertyType},
+			sort_num = #{sortNum},
+			is_show = #{isShow}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_goods_property SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

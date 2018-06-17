@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.商品评论.dao.interf.GoodsCommentsDao">
+    
+	<sql id="goodsCommentsColumns">
+		a.id AS "id",
+		a.goods_id AS "goodsId",
+		a.member_id AS "memberId",
+		a.content AS "content",
+		a.likes AS "likes",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="goodsCommentsJoins">
+	</sql>
+    
+	<select id="get" resultType="GoodsComments">
+		SELECT 
+			<include refid="goodsCommentsColumns"/>
+		FROM yk_goods_comments a
+		<include refid="goodsCommentsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GoodsComments">
+		SELECT 
+			<include refid="goodsCommentsColumns"/>
+		FROM yk_goods_comments a
+		<include refid="goodsCommentsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GoodsComments">
+		SELECT 
+			<include refid="goodsCommentsColumns"/>
+		FROM yk_goods_comments a
+		<include refid="goodsCommentsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_goods_comments(
+			id,
+			goods_id,
+			member_id,
+			content,
+			likes,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{goodsId},
+			#{memberId},
+			#{content},
+			#{likes},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_goods_comments SET 	
+			goods_id = #{goodsId},
+			member_id = #{memberId},
+			content = #{content},
+			likes = #{likes}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_goods_comments SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

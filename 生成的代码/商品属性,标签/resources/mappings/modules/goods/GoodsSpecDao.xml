@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.goods.dao.interf.GoodsSpecDao">
+    
+	<sql id="goodsSpecColumns">
+		a.id AS "id",
+		a.goods_id AS "goodsId",
+		a.goods_spec_no AS "goodsSpecNo",
+		a.spec_array AS "specArray",
+		a.difference_price AS "differencePrice",
+		a.store_num AS "storeNum",
+		a.store_warn_val AS "storeWarnVal",
+		a.del_flag AS "delFlag",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="goodsSpecJoins">
+	</sql>
+    
+	<select id="get" resultType="GoodsSpec">
+		SELECT 
+			<include refid="goodsSpecColumns"/>
+		FROM yk_goods_spec a
+		<include refid="goodsSpecJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GoodsSpec">
+		SELECT 
+			<include refid="goodsSpecColumns"/>
+		FROM yk_goods_spec a
+		<include refid="goodsSpecJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GoodsSpec">
+		SELECT 
+			<include refid="goodsSpecColumns"/>
+		FROM yk_goods_spec a
+		<include refid="goodsSpecJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_goods_spec(
+			id,
+			goods_id,
+			goods_spec_no,
+			spec_array,
+			difference_price,
+			store_num,
+			store_warn_val,
+			del_flag,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{goodsId},
+			#{goodsSpecNo},
+			#{specArray},
+			#{differencePrice},
+			#{storeNum},
+			#{storeWarnVal},
+			#{delFlag},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_goods_spec SET 	
+			goods_id = #{goodsId},
+			goods_spec_no = #{goodsSpecNo},
+			spec_array = #{specArray},
+			difference_price = #{differencePrice},
+			store_num = #{storeNum},
+			store_warn_val = #{storeWarnVal},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_goods_spec SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

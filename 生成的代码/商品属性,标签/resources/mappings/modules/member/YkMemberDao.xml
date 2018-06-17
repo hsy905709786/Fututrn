@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whs.shop.dubbo.services.modules.member.dao.interf.YkMemberDao">
+    
+	<sql id="ykMemberColumns">
+		a.id AS "id",
+		a.login_name AS "loginName",
+		a.login_password AS "loginPassword",
+		a.nick_name AS "nickName",
+		a.true_name AS "trueName",
+		a.phone AS "phone",
+		a.tel AS "tel",
+		a.member_level_id AS "memberLevelId",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.email AS "email",
+		a.head_img AS "headImg",
+		a.province_id AS "provinceId",
+		a.city_id AS "cityId",
+		a.area_id AS "area.id",
+		a.region_name AS "regionName",
+		a.address AS "address",
+		a.recommend_member_id AS "recommendMemberId",
+		a.promote_url AS "promoteUrl",
+		a.create_date AS "createDate",
+		a.role_type AS "roleType",
+		a.status AS "status",
+		a.channel_id AS "channelId",
+		a15.name AS "area.name"
+	</sql>
+	
+	<sql id="ykMemberJoins">
+		LEFT JOIN sys_area a15 ON a15.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="YkMember">
+		SELECT 
+			<include refid="ykMemberColumns"/>
+		FROM yk_member a
+		<include refid="ykMemberJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YkMember">
+		SELECT 
+			<include refid="ykMemberColumns"/>
+		FROM yk_member a
+		<include refid="ykMemberJoins"/>
+		<where>
+			
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name = #{loginName}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="provinceId != null and provinceId != ''">
+				AND a.province_id = #{provinceId}
+			</if>
+			<if test="cityId != null and cityId != ''">
+				AND a.city_id = #{cityId}
+			</if>
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="roleType != null and roleType != ''">
+				AND a.role_type = #{roleType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YkMember">
+		SELECT 
+			<include refid="ykMemberColumns"/>
+		FROM yk_member a
+		<include refid="ykMemberJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_member(
+			id,
+			login_name,
+			login_password,
+			nick_name,
+			true_name,
+			phone,
+			tel,
+			member_level_id,
+			sex,
+			birthday,
+			email,
+			head_img,
+			province_id,
+			city_id,
+			area_id,
+			region_name,
+			address,
+			recommend_member_id,
+			promote_url,
+			create_date,
+			role_type,
+			status,
+			channel_id
+		) VALUES (
+			#{id},
+			#{loginName},
+			#{loginPassword},
+			#{nickName},
+			#{trueName},
+			#{phone},
+			#{tel},
+			#{memberLevelId},
+			#{sex},
+			#{birthday},
+			#{email},
+			#{headImg},
+			#{provinceId},
+			#{cityId},
+			#{area.id},
+			#{regionName},
+			#{address},
+			#{recommendMemberId},
+			#{promoteUrl},
+			#{createDate},
+			#{roleType},
+			#{status},
+			#{channelId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_member SET 	
+			login_name = #{loginName},
+			login_password = #{loginPassword},
+			nick_name = #{nickName},
+			true_name = #{trueName},
+			phone = #{phone},
+			tel = #{tel},
+			member_level_id = #{memberLevelId},
+			sex = #{sex},
+			birthday = #{birthday},
+			email = #{email},
+			head_img = #{headImg},
+			province_id = #{provinceId},
+			city_id = #{cityId},
+			area_id = #{area.id},
+			region_name = #{regionName},
+			address = #{address},
+			recommend_member_id = #{recommendMemberId},
+			promote_url = #{promoteUrl},
+			role_type = #{roleType},
+			status = #{status},
+			channel_id = #{channelId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yk_member
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

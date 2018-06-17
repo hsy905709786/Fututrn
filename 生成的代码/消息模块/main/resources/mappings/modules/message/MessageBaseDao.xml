@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.message.dao.interf.MessageBaseDao">
+    
+	<sql id="messageBaseColumns">
+		a.id AS "id",
+		a.msg_type AS "msgType",
+		a.title AS "title",
+		a.sub_title AS "subTitle",
+		a.photo_url AS "photoUrl",
+		a.content AS "content",
+		a.send_type AS "sendType",
+		a.is_play AS "isPlay",
+		a.play_content AS "playContent",
+		a.link_type AS "linkType",
+		a.link_content AS "linkContent",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="messageBaseJoins">
+	</sql>
+    
+	<select id="get" resultType="MessageBase">
+		SELECT 
+			<include refid="messageBaseColumns"/>
+		FROM yk_message_base a
+		<include refid="messageBaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MessageBase">
+		SELECT 
+			<include refid="messageBaseColumns"/>
+		FROM yk_message_base a
+		<include refid="messageBaseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE concat('%',#{title},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MessageBase">
+		SELECT 
+			<include refid="messageBaseColumns"/>
+		FROM yk_message_base a
+		<include refid="messageBaseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_message_base(
+			id,
+			msg_type,
+			title,
+			sub_title,
+			photo_url,
+			content,
+			send_type,
+			is_play,
+			play_content,
+			link_type,
+			link_content,
+			del_flag,
+			create_by,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{msgType},
+			#{title},
+			#{subTitle},
+			#{photoUrl},
+			#{content},
+			#{sendType},
+			#{isPlay},
+			#{playContent},
+			#{linkType},
+			#{linkContent},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_message_base SET 	
+			msg_type = #{msgType},
+			title = #{title},
+			sub_title = #{subTitle},
+			photo_url = #{photoUrl},
+			content = #{content},
+			send_type = #{sendType},
+			is_play = #{isPlay},
+			play_content = #{playContent},
+			link_type = #{linkType},
+			link_content = #{linkContent},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_message_base SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

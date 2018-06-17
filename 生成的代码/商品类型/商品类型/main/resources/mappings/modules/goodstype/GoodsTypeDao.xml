@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.goodstype.dao.interf.GoodsTypeDao">
+    
+	<sql id="goodsTypeColumns">
+		a.id AS "id",
+		a.type_name AS "typeName",
+		a.parent_id AS "parent.id",
+		a.type_photo_url AS "typePhotoUrl",
+		a.is_show AS "isShow",
+		a.goods_num AS "goodsNum",
+		a.sort_num AS "sortNum",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="goodsTypeJoins">
+	</sql>
+    
+	<select id="get" resultType="GoodsType">
+		SELECT 
+			<include refid="goodsTypeColumns"/>
+		FROM yk_goods_type a
+		<include refid="goodsTypeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GoodsType">
+		SELECT 
+			<include refid="goodsTypeColumns"/>
+		FROM yk_goods_type a
+		<include refid="goodsTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GoodsType">
+		SELECT 
+			<include refid="goodsTypeColumns"/>
+		FROM yk_goods_type a
+		<include refid="goodsTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_goods_type(
+			id,
+			type_name,
+			parent_id,
+			type_photo_url,
+			is_show,
+			goods_num,
+			sort_num,
+			create_date,
+			update_date,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{typeName},
+			#{parent.id},
+			#{typePhotoUrl},
+			#{isShow},
+			#{goodsNum},
+			#{sortNum},
+			#{createDate},
+			#{updateDate},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_goods_type SET 	
+			type_name = #{typeName},
+			parent_id = #{parent.id},
+			type_photo_url = #{typePhotoUrl},
+			is_show = #{isShow},
+			goods_num = #{goodsNum},
+			sort_num = #{sortNum},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE yk_goods_type SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

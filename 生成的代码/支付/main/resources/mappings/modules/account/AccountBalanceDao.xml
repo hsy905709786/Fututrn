@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.account.dao.interf.AccountBalanceDao">
+    
+	<sql id="accountBalanceColumns">
+		a.id AS "id",
+		a.account_id AS "accountId",
+		a.balance_type AS "balanceType",
+		a.amount AS "amount",
+		a.update_date AS "updateDate",
+		a.user_type AS "userType"
+	</sql>
+	
+	<sql id="accountBalanceJoins">
+	</sql>
+    
+	<select id="get" resultType="AccountBalance">
+		SELECT 
+			<include refid="accountBalanceColumns"/>
+		FROM yk_account_balance a
+		<include refid="accountBalanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AccountBalance">
+		SELECT 
+			<include refid="accountBalanceColumns"/>
+		FROM yk_account_balance a
+		<include refid="accountBalanceJoins"/>
+		<where>
+			
+			<if test="accountId != null and accountId != ''">
+				AND a.account_id = #{accountId}
+			</if>
+			<if test="balanceType != null and balanceType != ''">
+				AND a.balance_type = #{balanceType}
+			</if>
+			<if test="userType != null and userType != ''">
+				AND a.user_type = #{userType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AccountBalance">
+		SELECT 
+			<include refid="accountBalanceColumns"/>
+		FROM yk_account_balance a
+		<include refid="accountBalanceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_account_balance(
+			id,
+			account_id,
+			balance_type,
+			amount,
+			update_date,
+			user_type
+		) VALUES (
+			#{id},
+			#{accountId},
+			#{balanceType},
+			#{amount},
+			#{updateDate},
+			#{userType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_account_balance SET 	
+			account_id = #{accountId},
+			balance_type = #{balanceType},
+			amount = #{amount},
+			update_date = #{updateDate},
+			user_type = #{userType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yk_account_balance
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

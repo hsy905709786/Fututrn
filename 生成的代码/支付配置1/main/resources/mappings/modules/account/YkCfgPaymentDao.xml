@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yk.shop.modules.account.dao.interf.YkCfgPaymentDao">
+    
+	<sql id="ykCfgPaymentColumns">
+		a.id AS "id",
+		a.alipay_appid AS "alipayAppid",
+		a.alipay_app_private_key AS "alipayAppPrivateKey",
+		a.alipay_public_key AS "alipayPublicKey",
+		a.wx_appid AS "wxAppid",
+		a.wx_appsecret AS "wxAppsecret",
+		a.wx_mchid AS "wxMchid",
+		a.wx_pay_key AS "wxPayKey",
+		a.wx_pub_appid AS "wxPubAppid",
+		a.wx_pub_appsecret AS "wxPubAppsecret",
+		a.wx_pub_mchid AS "wxPubMchid",
+		a.wx_pub_pay_key AS "wxPubPayKey",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="ykCfgPaymentJoins">
+	</sql>
+    
+	<select id="get" resultType="YkCfgPayment">
+		SELECT 
+			<include refid="ykCfgPaymentColumns"/>
+		FROM yk_cfg_payment a
+		<include refid="ykCfgPaymentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YkCfgPayment">
+		SELECT 
+			<include refid="ykCfgPaymentColumns"/>
+		FROM yk_cfg_payment a
+		<include refid="ykCfgPaymentJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YkCfgPayment">
+		SELECT 
+			<include refid="ykCfgPaymentColumns"/>
+		FROM yk_cfg_payment a
+		<include refid="ykCfgPaymentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yk_cfg_payment(
+			id,
+			alipay_appid,
+			alipay_app_private_key,
+			alipay_public_key,
+			wx_appid,
+			wx_appsecret,
+			wx_mchid,
+			wx_pay_key,
+			wx_pub_appid,
+			wx_pub_appsecret,
+			wx_pub_mchid,
+			wx_pub_pay_key,
+			create_date
+		) VALUES (
+			#{id},
+			#{alipayAppid},
+			#{alipayAppPrivateKey},
+			#{alipayPublicKey},
+			#{wxAppid},
+			#{wxAppsecret},
+			#{wxMchid},
+			#{wxPayKey},
+			#{wxPubAppid},
+			#{wxPubAppsecret},
+			#{wxPubMchid},
+			#{wxPubPayKey},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yk_cfg_payment SET 	
+			alipay_appid = #{alipayAppid},
+			alipay_app_private_key = #{alipayAppPrivateKey},
+			alipay_public_key = #{alipayPublicKey},
+			wx_appid = #{wxAppid},
+			wx_appsecret = #{wxAppsecret},
+			wx_mchid = #{wxMchid},
+			wx_pay_key = #{wxPayKey},
+			wx_pub_appid = #{wxPubAppid},
+			wx_pub_appsecret = #{wxPubAppsecret},
+			wx_pub_mchid = #{wxPubMchid},
+			wx_pub_pay_key = #{wxPubPayKey}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yk_cfg_payment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
